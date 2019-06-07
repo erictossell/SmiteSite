@@ -1,0 +1,20 @@
+//6/4/2019 -- Eric Tossell -- Header Sass
+.header {
+    position: fixed;
+    background-color: $color-white;
+    font-size: 1.4rem;
+    height: 7rem;
+    width: 100%;
+    border-bottom: 5px solid $color-primary;
+    z-index: 2;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    
+    &__title {      
+         color: $color-primary;
+         font-size: 2rem;
+         margin-left: 2rem;
+    }
+}

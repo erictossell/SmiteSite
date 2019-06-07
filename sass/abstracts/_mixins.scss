@@ -1,0 +1,9 @@
+// 6/3/2019 -- Eric Tossell -- Mixins Sass
+
+@mixin clearfix {
+    &::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}

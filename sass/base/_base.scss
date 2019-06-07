@@ -1,0 +1,21 @@
+// 6/3/2019 -- Eric Tossell -- Base reset descriptor
+
+*,
+*::after,
+*::before {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    //Global definition for 1 rem
+    font-size: 62.5%;
+}
+
+body {
+    box-sizing: border-box;
+    font-weight: 400;
+    line-height: 1.6;
+    
+}
