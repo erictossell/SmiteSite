@@ -12,11 +12,17 @@
         
         &-tr {            
 
+            &__td {               
+                text-align: center;        
+                
+                
+            }
             &__th {
                 
                 border-bottom: 2px solid $color-primary;
                 
                 color:$color-primary;
+                
             }
         }
     }

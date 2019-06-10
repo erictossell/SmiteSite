@@ -58,124 +58,14 @@ body {
   margin-right: auto;
   margin-left: auto; }
 
-.navigation__checkbox {
-  display: none; }
-
-.navigation__button {
-  background-color: #ffff;
-  height: 5rem;
-  width: 5rem;
-  position: fixed;
-  top: .5rem;
-  right: 1.5rem;
-  border-radius: 50%;
-  border: 1px solid #d5ca65;
-  z-index: 2000;
-  box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
-  text-align: center;
-  cursor: pointer; }
-
-.navigation__background {
-  height: 5rem;
-  width: 5rem;
-  border-radius: 50%;
-  position: fixed;
-  top: .5rem;
-  right: 1.5rem;
-  background-image: radial-gradient(rgba(249, 243, 155, 0.973), #d5ca65);
-  z-index: 1000;
-  transition: transform 0.8s cubic-bezier(0.86, 0, 0.07, 1); }
-
-.navigation__nav {
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: 1500;
-  opacity: 0;
-  width: 0;
-  transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55); }
-
-.navigation__list {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  list-style: none;
-  text-align: center;
-  width: 100%; }
-
-.navigation__item {
-  margin: 1rem; }
-
-.navigation__link:link, .navigation__link:visited {
-  display: inline-block;
-  font-size: 3rem;
-  font-weight: 300;
-  padding: 1rem 2rem;
-  color: #ffff;
-  text-decoration: none;
-  text-transform: uppercase;
-  background-image: linear-gradient(120deg, transparent 0%, transparent 50%, #ffff 50%);
-  background-size: 220%;
-  transition: all .4s; }
-  .navigation__link:link span, .navigation__link:visited span {
-    margin-right: 1.5rem;
-    display: inline-block; }
-
-.navigation__link:hover, .navigation__link:active {
-  background-position: 100%;
-  color: #d5ca65;
-  transform: translateX(1rem); }
-
-.navigation__checkbox:checked ~ .navigation__background {
-  transform: scale(80); }
-
-.navigation__checkbox:checked ~ .navigation__nav {
-  opacity: 1;
-  width: 100%; }
-
-.navigation__icon {
-  position: relative;
-  margin-top: 2.4rem; }
-  .navigation__icon, .navigation__icon::before, .navigation__icon::after {
-    width: 2.7rem;
-    height: 2px;
-    background-color: #d5ca65;
-    display: inline-block; }
-  .navigation__icon::before, .navigation__icon::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    transition: all .2s; }
-  .navigation__icon::before {
-    top: -.8rem; }
-  .navigation__icon::after {
-    top: .8rem; }
-
-.navigation__button:hover .navigation__icon::before {
-  top: -1rem; }
-
-.navigation__button:hover .navigation__icon::after {
-  top: 1rem; }
-
-.navigation__checkbox:checked + .navigation__button .navigation__icon {
-  background-color: transparent; }
-
-.navigation__checkbox:checked + .navigation__button .navigation__icon::before {
-  top: 0;
-  transform: rotate(135deg); }
-
-.navigation__checkbox:checked + .navigation__button .navigation__icon::after {
-  top: 0;
-  transform: rotate(-135deg); }
-
 .livematch {
   background-color: #ffff;
   border-spacing: 2rem;
   border-collapse: separate;
   border: 2px solid #d5ca65;
   width: 100%; }
+  .livematch-thead-tr__td {
+    text-align: center; }
   .livematch-thead-tr__th {
     border-bottom: 2px solid #d5ca65;
     color: #d5ca65; }
@@ -223,26 +113,27 @@ body {
         float: left;
         font-size: 1.5rem;
         font-family: inherit;
-        color: inherit;
+        color: #d5ca65;
         padding: 1.5rem 2rem;
         width: 32rem;
         background-color: rgba(255, 255, 255, 0.5);
         border: none;
-        border-bottom: 2px solid #d5ca65; }
+        border: 2px solid #d5ca65; }
         .header__search-form--input:focus {
           outline: none;
-          box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.1);
           border-bottom: 2px solid #d5ca65; }
         .header__search-form--input:focus:invalid {
           border-bottom: 2px solid #000; }
         .header__search-form--input::-webkit-input-placeholder {
-          color: grey; }
+          color: #d5ca65; }
       .header__search-form--button {
         float: left;
-        padding: 1.1rem;
-        background: #d5ca65;
+        padding: 1.2rem;
+        background: #ffff;
+        border: 2px solid #d5ca65;
+        border-left: none;
         border-radius: 2px;
-        color: #ffff;
+        color: #d5ca65;
         font-size: 2rem;
         cursor: pointer; }
 
@@ -253,7 +144,7 @@ body {
 
 .section-livematch {
   height: 90vh;
-  background-image: linear-gradient(to right bottom, rgba(249, 243, 155, 0.7), rgba(213, 202, 101, 0.7)), url(../img/smitegods3.jpg);
+  background-image: linear-gradient(to right bottom, rgba(249, 243, 155, 0.6), rgba(213, 202, 101, 0.6)), url(../img/smitegods3.jpg);
   background-position: center;
   position: relative;
   padding-top: 20vh; }
