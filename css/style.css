@@ -7,6 +7,15 @@
 
 html {
   font-size: 62.5%; }
+  @media only screen and (max-width: 75em) {
+    html {
+      font-size: 56.25%; } }
+  @media only screen and (max-width: 56.25em) {
+    html {
+      font-size: 50%; } }
+  @media only screen and (min-width: 112.5em) {
+    html {
+      font-size: 75%; } }
 
 body {
   box-sizing: border-box;
@@ -73,6 +82,15 @@ body {
       height: 35%;
       margin-left: auto;
       margin-right: auto; }
+      @media only screen and (max-width: 75em) {
+        .livematch-tbody-tr__td--img {
+          height: 15%; } }
+      @media only screen and (max-width: 56.25em) {
+        .livematch-tbody-tr__td--img {
+          height: 25%; } }
+      @media only screen and (min-width: 112.5em) {
+        .livematch-tbody-tr__td--img {
+          height: 25%; } }
 
 .smallcol {
   width: 5%; }

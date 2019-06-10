@@ -33,6 +33,17 @@
                     margin-left: auto;
                     margin-right: auto;
                     
+                    @include respond(tab-land) { // width < 1200?
+                        height: 15%;
+                    }
+                
+                    @include respond(tab-port) { // width < 900?
+                        height: 25%;
+                    }
+                    
+                    @include respond(big-desktop) {
+                        height: 25%;
+                    } 
 
                 }
                 
