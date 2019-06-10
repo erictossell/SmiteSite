@@ -60,15 +60,31 @@ body {
 
 .livematch {
   background-color: #ffff;
-  border-spacing: 2rem;
+  border-spacing: .5rem;
   border-collapse: separate;
   border: 2px solid #d5ca65;
   width: 100%; }
-  .livematch-thead-tr__td {
-    text-align: center; }
   .livematch-thead-tr__th {
     border-bottom: 2px solid #d5ca65;
     color: #d5ca65; }
+  .livematch-tbody-tr__td {
+    text-align: center; }
+    .livematch-tbody-tr__td--img {
+      height: 35%;
+      margin-left: auto;
+      margin-right: auto; }
+
+.smallcol {
+  width: 5%; }
+
+.medcol {
+  width: 15%; }
+
+.greenteam {
+  border: 3px solid green; }
+
+.redteam {
+  border: 3px solid red; }
 
 .row {
   max-width: 114rem;
@@ -147,4 +163,4 @@ body {
   background-image: linear-gradient(to right bottom, rgba(249, 243, 155, 0.6), rgba(213, 202, 101, 0.6)), url(../img/smitegods3.jpg);
   background-position: center;
   position: relative;
-  padding-top: 20vh; }
+  padding-top: 15vh; }
