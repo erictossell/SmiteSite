@@ -1,0 +1,25 @@
+.livematch {
+    background-color: $color-white;
+    border-spacing: 2rem;
+    border-collapse: separate;
+    border: 2px solid $color-primary;
+    width: 100%;
+    
+    
+   
+    
+    &-thead{
+        
+        &-tr {            
+
+            &__th {
+                
+                border-bottom: 2px solid $color-primary;
+                
+                color:$color-primary;
+            }
+        }
+    }
+
+
+}
