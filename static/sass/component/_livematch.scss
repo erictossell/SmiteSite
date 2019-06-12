@@ -1,0 +1,69 @@
+.livematch {
+    background-color: $color-white;
+    border-spacing: .5rem;
+    border-collapse: separate;
+    border: 2px solid $color-primary;
+    width: 100%;
+    
+    
+   
+    
+    &-thead{
+        
+        &-tr {            
+
+            
+            &__th {
+                
+                border-bottom: 2px solid $color-primary;
+                
+                color:$color-primary;
+                
+            }
+        }
+    }
+    &-tbody{
+        &-tr{
+
+            &__td {               
+                text-align: center;    
+                
+                &--img {
+                    height: 15%;
+                    margin-left: auto;
+                    margin-right: auto;
+                    
+                    @include respond(tab-land) { // width < 1200?
+                        height: 15%;
+                    }
+                
+                    @include respond(tab-port) { // width < 900?
+                        height: 15%;
+                    }
+                    
+                    @include respond(big-desktop) {
+                        height: 25%;
+                    } 
+
+                }
+                
+                
+            }
+        }
+    }
+
+
+}
+.smallcol {
+    width: 5%;
+}
+.medcol {
+    width: 15%;
+}
+
+.greenteam {
+    border: 1px solid green;
+}
+.redteam {
+    border: 1px solid red;
+}

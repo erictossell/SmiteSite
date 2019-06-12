@@ -131,13 +131,17 @@ print(win)
 def index():
     return render_template("index.html")
 
-@app.route('/<player>')
-def main(player):
-    live = live_match_data(dev_id, auth_key, session_id, time, player)
-    if live == "Offline": #the player is not ingame
-        return "<h1>Offline</h1>"
-    elif live =="Private":
-        return "<h1>Private</h1>"
-    else: #the player is ingame
-        #return render_template("index.html")
-        return render_template("main.html", data=live)
+@app.route("/search", methods=['GET'])
+def search():
+    if request.method=='GET':
+        username=request.args.get('player')
+        
+        live = live_match_data(dev_id, auth_key, session_id, time, username)
+        if live == "Offline": #the player is not ingame
+            return "<h1>Offline</h1>"
+        elif live =="Private":
+            return "<h1>Private</h1>"
+        else: #the player is ingame
+            #return render_template("index.html")
+            return render_template("main.html", data=live)
+    return render_template("main.html", data=live)            

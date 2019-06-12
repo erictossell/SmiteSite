@@ -1,0 +1,148 @@
+<!-- 6/3/2019 -- Eric Tossell -- Main HTML -->
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <link rel="stylesheet" href="../static/css/style.css">
+
+<!--
+D:\Users\Erik\Downloads\all\Code\SmiteLive\static\styles\css\style.css
+D:\Users\Erik\Downloads\all\Code\SmiteLive\templates\main.html
+-->
+        <title>SmiteSite</title>
+    </head>
+    <body>
+        <header class="header">         
+                <h2 class="header__title">Smite Live Match</h2>
+
+                <div class="header__search">
+                    <form action="search" method="GET" class="header__search-form">
+                        <input type="text" class="header__search-form--input" id="player" name="player" placeholder="Search current matches...">
+                        <button class="header__search-form--button" type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                </div>
+                
+                       
+        </header>
+
+        <main>
+                <section class="section-livematch">
+                    <div class="row u-center-element">
+                        
+                        <table class="livematch">
+                                <thead class="livematch-thead">
+                                    <tr class="livematch-thead-tr">
+                                        <th class="livematch-thead-tr__th" colspan=2>Queue Type</th>
+                                        <th class="livematch-thead-tr__th" colspan=2>Map</th>
+                                    </tr>
+                                </thead>
+                                <thead class="livematch-thead">
+                                    <tr class="livematch-thead-tr">
+                                        <th class="livematch-thead-tr__th">God</th>
+                                        <th class="livematch-thead-tr__th">Player Name</th>
+                                        <th class="livematch-thead-tr__th">Hours Played</th>
+                                        <th class="livematch-thead-tr__th" colspan="3">Champion Information</th>                                        
+                                    </tr>
+                                </thead>
+                                <tbody class="livematch-tbody">
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td smallcol"><img src="{{ data[0][7]}}" class="livematch-tbody-tr__td--img greenteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[0][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[0][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[0][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[0][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[0][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td smallcol"><img src="{{ data[1][7]}}" class="livematch-tbody-tr__td--img greenteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[1][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[1][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[1][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[1][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[1][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td smallcol"><img src="{{ data[2][7]}}" class="livematch-tbody-tr__td--img greenteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[2][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[2][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[2][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[2][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[2][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[3][7]}}" class="livematch-tbody-tr__td--img greenteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[3][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[3][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[3][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[3][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[3][6] }} KDA</td>
+
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[4][7]}}" class="livematch-tbody-tr__td--img greenteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[4][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[4][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[4][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[4][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[4][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[5][7]}}" class="livematch-tbody-tr__td--img redteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[5][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[5][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[5][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[5][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[5][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[6][7]}}" class="livematch-tbody-tr__td--img redteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[6][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[6][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[6][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[6][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[6][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[7][7]}}" class="livematch-tbody-tr__td--img redteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[7][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[7][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[7][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[7][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[7][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[8][7]}}" class="livematch-tbody-tr__td--img redteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[8][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[8][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[8][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[8][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[8][6] }} KDA</td>
+                                        </tr>
+                                        <tr class="livematch-tbody-tr">
+                                                <td class="livematch-tbody-tr__td"><img src="{{ data[9][7]}}" class="livematch-tbody-tr__td--img redteam"></td>
+                                                <td class="livematch-tbody-tr__td">{{ data[9][2] }}</td>
+                                                <td class="livematch-tbody-tr__td smallcol">{{ data[9][3] }}</td>
+                                                <td class="livematch-tbody-tr__td medcol">{{ data[9][4] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[9][5] }}</td>
+                                                <td class="livematch-tbody-tr__td">{{ data[9][6] }} KDA</td>
+                                        </tr>
+                                </tbody>
+            
+                            </table>
+                        
+                        
+
+                    </div>
+                </section>
+        </main>
+        <footer class="footer">
+                <div class="row u-center-text">
+                        <h2>Smite Live Match</h2>
+                        <p>All rights reserved</p>
+                </div>
+        </footer>
+    </body>
+</html>
