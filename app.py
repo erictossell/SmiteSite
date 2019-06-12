@@ -60,7 +60,7 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
                                            round(gdt[y]['Wins']/(gdt[y]['Wins']+gdt[y]['Losses']),2),
                                            gdt[y]['Wins']+gdt[y]['Losses'],
                                            round(((gdt[y]['Kills']+gdt[y]['Assists'])/gdt[y]['Deaths']),2),
-                                           "https://web2.hirez.com/smite/god-icons/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
+                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
                         found = True
                 if found == False:
                     match_data.append([mdt[x]['taskForce'],
@@ -70,10 +70,10 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
                                            0,
                                            0,
                                            0,
-                                           "https://web2.hirez.com/smite/god-icons/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
+                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
                         
             else:
-                match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"https://web2.hirez.com/smite/god-icons/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
+                match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
         #print("{} | {:12} | {:16} | {:5} | {:4} | {:3} | {:4}".format(" ","God","Player","Hours","Win %","Games", "KDA"))
         return match_data
 
@@ -121,11 +121,12 @@ def win_prediction(match_data):
 
 #gods = call('getgods', dev_id, auth_key, session_id, time, "/1")
 #print(gods[0])
+'''
 live = live_match_data(dev_id, auth_key, session_id, time, "EckiD")
 print(live)
 win = win_prediction(live)
 print(win)
-
+'''
 #@app.route('/player/'+name)
 @app.route('/')
 def index():
