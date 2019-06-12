@@ -1,4 +1,3 @@
-<!-- 6/3/2019 -- Eric Tossell -- Main HTML -->
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -6,17 +5,16 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <link rel="stylesheet" href="css/style.css">
-
-        <title>SmiteSite</title>
+        <link rel="stylesheet" href="../static/style.css">
+        <title>Smite Live</title>
     </head>
     <body>
         <header class="header">         
                 <h2 class="header__title">Smite Live Match</h2>
 
                 <div class="header__search">
-                    <form action="POST" class="header__search-form">
-                        <input type="text" class="header__search-form--input" id="header__search-form--label" placeholder="Search current matches...">
+                    <form action="/{{ player }}" class="header__search-form">
+                        <input type="text" class="header__search-form--input" id="search-box" placeholder="Search current matches...">
                         <button class="header__search-form--button" type="submit"><i class="fa fa-search"></i></button>
                     </form>
                 </div>
@@ -24,115 +22,7 @@
                        
         </header>
 
-        <main>
-                <section class="section-livematch">
-                    <div class="row u-center-element">
-                        
-                        <table class="livematch">
-                                <thead class="livematch-thead">
-                                    <tr class="livematch-thead-tr">
-                                        <th class="livematch-thead-tr__th" colspan=2>Queue Type</th>
-                                        <th class="livematch-thead-tr__th" colspan=2>Map</th>
-                                    </tr>
-                                </thead>
-                                <thead class="livematch-thead">
-                                    <tr class="livematch-thead-tr">
-                                        <th class="livematch-thead-tr__th">God</th>
-                                        <th class="livematch-thead-tr__th">Player Name</th>
-                                        <th class="livematch-thead-tr__th">Hours Played</th>
-                                        <th class="livematch-thead-tr__th" colspan="3">Champion Information</th>                                        
-                                    </tr>
-                                </thead>
-                                <tbody class="livematch-tbody">
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td smallcol"><img src="https://web2.hirez.com/smite/god-icons/achilles.jpg" class="livematch-tbody-tr__td--img greenteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td smallcol">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td medcol">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/chaac.jpg" class="livematch-tbody-tr__td--img greenteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/kukulkan.jpg" class="livematch-tbody-tr__td--img greenteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/poseidon.jpg" class="livematch-tbody-tr__td--img greenteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/arachne.jpg" class="livematch-tbody-tr__td--img greenteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/hercules.jpg" class="livematch-tbody-tr__td--img redteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/ra.jpg" class="livematch-tbody-tr__td--img redteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/odin.jpg" class="livematch-tbody-tr__td--img redteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/set.jpg" class="livematch-tbody-tr__td--img redteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                        <tr class="livematch-tbody-tr">
-                                                <td class="livematch-tbody-tr__td"><img src="https://web2.hirez.com/smite/god-icons/rama.jpg" class="livematch-tbody-tr__td--img redteam"></td>
-                                                <td class="livematch-tbody-tr__td">Player Name</td>
-                                                <td class="livematch-tbody-tr__td">Total Hours</td>
-                                                <td class="livematch-tbody-tr__td">WinRate</td>
-                                                <td class="livematch-tbody-tr__td">GodGames</td>
-                                                <td class="livematch-tbody-tr__td">KDA</td>
-                                        </tr>
-                                </tbody>
-            
-                            </table>
-                        
-                        
 
-                    </div>
-                </section>
-        </main>
         <footer class="footer">
                 <div class="row u-center-text">
                         <h2>Smite Live Match</h2>
