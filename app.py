@@ -25,7 +25,7 @@ def start_session(dev_id, auth_key, time):
 def call(api_type, dev_id, auth_key, session_id, time, parameter1, parameter2="", parameter3=""):
     call_sig = signature(dev_id, api_type, auth_key, time)
     call_string = api_url + "/" + api_type + "json/" + dev_id + "/" + call_sig + "/" + session_id + "/" + time + parameter1 + parameter2 + parameter3
-    print(call_string)
+    #print(call_string)
     response = requests.get(call_string).json()
     return response
     
@@ -75,7 +75,7 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
             else:
                 match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
         #print("{} | {:12} | {:16} | {:5} | {:4} | {:3} | {:4}".format(" ","God","Player","Hours","Win %","Games", "KDA"))
-        match_data = sorted(mx,key=lambda x: (x[0],x[1]))
+        match_data = sorted(match_data,key=lambda x: (x[0],x[1]))
         return match_data
 
 def win_prediction(match_data):
@@ -94,7 +94,7 @@ def win_prediction(match_data):
             team1hours = 0
             team1wins = 0
             count = 0
-            point = len(mdt)//2
+            point = len(mx)//2
             for a in range(point):
                 if mx[a][2] != '':
                     count +=1
@@ -106,18 +106,20 @@ def win_prediction(match_data):
             team2hours = 0
             team2wins = 0
             count = 0
-            for a in range(point,len(mdt)):
+            for a in range(point,len(mx)):
                 if mx[a][2] != '':
                     count +=1
                     team2hours += mx[a][3]
                     team2wins += mx[a][4]*mx[a][5]
             team2hours /= count
             team2wins /= count
-            team1skill = (team1hours/(team1hours + team2hours) + team1wins/(team1wins + team2wins))/2
-            team2skill = 1 - team1skill
+            team1skill = 100* (team1hours/(team1hours + team2hours) + team1wins/(team1wins + team2wins))/2
+            team2skill = (100 - team1skill)
+            team1skill = round(team1skill,1) 
+            team2skill = round(team2skill,1)
             #print("Team 1 Skill: {}%".format(round(100*team1skill,2)))
             #print("Team 2 Skill: {}%".format(round(100*team2skill,2)))
-            return (team1skill, team2skill)
+            return ([team1skill, team2skill])
 
 #gods = call('getgods', dev_id, auth_key, session_id, time, "/1")
 #print(gods[0])
@@ -136,13 +138,14 @@ def index():
 def search():
     if request.method=='GET':
         username=request.args.get('player')
-        
         live = live_match_data(dev_id, auth_key, session_id, time, username)
+        model = win_prediction(live)
         if live == "Offline": #the player is not ingame
             return "<h1>Offline</h1>"
         elif live =="Private":
             return "<h1>Private</h1>"
         else: #the player is ingame
             #return render_template("index.html")
-            return render_template("main.html", data=live)
+            
+            return render_template("main.html", data=live, model=model)
     return render_template("main.html", data=live)            
