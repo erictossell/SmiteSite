@@ -75,6 +75,7 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
             else:
                 match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
         #print("{} | {:12} | {:16} | {:5} | {:4} | {:3} | {:4}".format(" ","God","Player","Hours","Win %","Games", "KDA"))
+        match_data = sorted(mx,key=lambda x: (x[0],x[1]))
         return match_data
 
 def win_prediction(match_data):
@@ -82,7 +83,6 @@ def win_prediction(match_data):
             return "No Access"
         else:
             mx = match_data
-            mx = sorted(mx,key=lambda x: (x[0],x[1]))
             '''
             for z in range(len(mx)):
                 if len(mx[z]) == 2:

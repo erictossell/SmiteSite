@@ -52,15 +52,16 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
                 gdt = call("getgodranks", dev_id, auth_key, session_id, time, "/"+mdt[x]['playerName'])
                 found = False
                 for y in range(len(gdt)):
-                    if (gdt[y]['god'] == mdt[x]['GodName']):
-                        match_data.append([mdt[x]['taskForce'],
-                                           mdt[x]['GodName'],
-                                           mdt[x]['playerName'],
-                                           pdt[0]['HoursPlayed'],
-                                           round(gdt[y]['Wins']/(gdt[y]['Wins']+gdt[y]['Losses']),2),
-                                           gdt[y]['Wins']+gdt[y]['Losses'],
-                                           round(((gdt[y]['Kills']+gdt[y]['Assists'])/gdt[y]['Deaths']),2),
-                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
+                    if (gdt[y]['god'] == mdt[x]['GodName']):        #i will reformat this to a dictionary, I am silly. :P
+                        match_data.append([mdt[x]['taskForce'],     #0
+                                           mdt[x]['GodName'],       #1
+                                           mdt[x]['playerName'],    #2
+                                           pdt[0]['HoursPlayed'],   #3
+                                           gdt[y]['Wins'],          #4
+                                           gdt[y]['Wins']+gdt[y]['Losses'], #5
+                                           round(((gdt[y]['Kills']+gdt[y]['Assists'])/gdt[y]['Deaths']),2), #6
+                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg", #7
+                                           "public"])   #8
                         found = True
                 if found == False:
                     match_data.append([mdt[x]['taskForce'],
@@ -70,13 +71,75 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
                                            0,
                                            0,
                                            0,
-                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
-                        
+                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg",
+                                           "public"])
             else:
-                match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg"])
+                match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg","private"])
         #print("{} | {:12} | {:16} | {:5} | {:4} | {:3} | {:4}".format(" ","God","Player","Hours","Win %","Games", "KDA"))
+        match_data = {'id':match_id,'data':match_data}
         return match_data
 
+def pregame_data(match_data):
+    team_1 = {
+        'gods': [],
+        'time': 0,
+#        'god_wins': 0,
+        'god_games': 0,
+#        'god_winrate': 0,
+#        'god_kda': 0,
+#        'public': 0
+    }
+    team_2 = {
+        'gods': [],
+        'time': 0,
+#        'god_wins': 0,
+        'god_games': 0,
+#        'god_winrate': 0,
+#        'god_kda': 0,
+#        'public': 0
+    }
+    
+    half = len(match_data['data'])//2
+    team_1_publics = 0
+    team_2_publics = 0
+    for p in range(0,half):
+        team_1['gods'].append(match_data['data'][p][1]) #god
+        if (match_data['data'][p][-1] == "public"):
+            team_1['time'] += match_data['data'][p][3]      #time
+            team_1['god_games'] += match_data['data'][p][5] #god_games
+            team_1_publics += 1
+    if (team_1['time'] != 0):
+        team_1['time'] /= team_1_publics
+    if (team_1['god_games'] != 0):
+        team_1['god_games'] /= team_1_publics
+    
+    for p in range(half,len(match_data['data'])):
+        team_2['gods'].append(match_data['data'][p][1]) #god
+        if (match_data['data'][p][-1] == "public"):
+            team_2['time'] += match_data['data'][p][3]      #time
+            team_2['god_games'] += match_data['data'][p][5] #god_games
+            team_2_publics += 1
+    if (team_2['time'] != 0):
+        team_2['time'] /= team_2_publics
+    if (team_2['god_games'] != 0):
+        team_2['god_games'] /= team_2_publics
+    print(team_1_publics)
+    print(team_2_publics)
+    print(match_data['id'])
+    return ({'id':match_data['id'],'teams':[team_1, team_2]})
+
+def postgame_data(match_id):
+    return call('getdemodetails', dev_id, auth_key, session_id, time, match_id)[0]['Winning_Team']
+
+live = live_match_data(dev_id, auth_key, session_id, time, "simplicityxo")
+print(live)
+if live != "Offline" and live != "Private":
+    pred = pregame_data(live)
+    print(pred)
+x = postgame_data('/942154704')
+print(x)
+
+'''
 import pandas as pd
 import xgboost as xjb
 from sklearn.linear_model import LogisticalRegression
@@ -91,7 +154,7 @@ def training_add_result(data):
 
 def win_prediction(training):
     training = pd.read_csv('final_dataset.csv')
-
+'''
 
 
 
