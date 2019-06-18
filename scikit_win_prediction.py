@@ -8,7 +8,7 @@ import hashlib
 #current time
 t = datetime.datetime.utcnow()
 time = "{}{:02d}{:02d}{:02d}{:02d}{:02d}".format(t.year, t.month, t.day, t.hour, t.minute, t.second)
-
+print(time)
 api_url = "http://api.smitegame.com/smiteapi.svc"
 dev_id = "3222"
 auth_key = "8C9376AF7E8A49A2A774574F48ED4D3F"
@@ -22,10 +22,10 @@ def start_session(dev_id, auth_key, time):
     session_string = api_url + "/createsessionjson/" + dev_id + "/" + session_sig + "/" + time
     return requests.get(session_string).json()['session_id']
 
-def call(api_type, dev_id, auth_key, session_id, time, parameter1, parameter2="", parameter3=""):
+def call(api_type, dev_id, auth_key, session_id, time, parameter1, parameter2="", parameter3="", parameter4=""):
     call_sig = signature(dev_id, api_type, auth_key, time)
-    call_string = api_url + "/" + api_type + "json/" + dev_id + "/" + call_sig + "/" + session_id + "/" + time + parameter1 + parameter2 + parameter3
-    print(call_string)
+    call_string = api_url + "/" + api_type + "json/" + dev_id + "/" + call_sig + "/" + session_id + "/" + time + parameter1 + parameter2 + parameter3 + parameter4
+    #print(call_string)
     response = requests.get(call_string).json()
     return response
     
@@ -79,110 +79,147 @@ def live_match_data(dev_id, auth_key, session_id, time, player_name):
         match_data = {'id':match_id,'data':match_data}
         return match_data
 
-def pregame_data(match_data):
-    team_1 = {
-        'gods': [],
-        'time': 0,
-#        'god_wins': 0,
-        'god_games': 0,
-#        'god_winrate': 0,
-#        'god_kda': 0,
-#        'public': 0
-    }
-    team_2 = {
-        'gods': [],
-        'time': 0,
-#        'god_wins': 0,
-        'god_games': 0,
-#        'god_winrate': 0,
-#        'god_kda': 0,
-#        'public': 0
-    }
+def player_id_from_name(dev_id, auth_key, session_id, time, player_name):
+    player_id = call("getplayer", dev_id, auth_key, session_id, time, "/"+player_name, "", "")
+    if player_id == []:
+        return "Private"
+    else:
+        player_id = player_id[0]["Id"]
+        player_id = "/" + str(player_id)
+        return player_id
     
-    half = len(match_data['data'])//2
-    team_1_publics = 0
-    team_2_publics = 0
-    for p in range(0,half):
-        team_1['gods'].append(match_data['data'][p][1]) #god
-        if (match_data['data'][p][-1] == "public"):
-            team_1['time'] += match_data['data'][p][3]      #time
-            team_1['god_games'] += match_data['data'][p][5] #god_games
-            team_1_publics += 1
-    if (team_1['time'] != 0):
-        team_1['time'] /= team_1_publics
-    if (team_1['god_games'] != 0):
-        team_1['god_games'] /= team_1_publics
+def player_live_data_from_id(dev_id, auth_key, session_id, time, player_id):
+    player_live = call("getplayerstatus", dev_id, auth_key, session_id, time, player_id)
+    return player_live
+
+def match_data_from_match_id(dev_id, auth_key, session_id, time, match_id):
+    match_data = call("getmatchplayerdetails", dev_id, auth_key, session_id, time, match_id)
+    match_data = sorted(match_data, key=lambda k: k['taskForce']) 
+    return match_data
+
+def match_id_batch(dev_id, auth_key, session_id, time, queue_id, date, hour, minute):
+    match_id_batch = call('getmatchidsbyqueue', dev_id, auth_key, session_id, time, queue_id, date, hour, minute)
+    return match_id_batch
+
+def god_data_from_player_id(dev_id, auth_key, session_id, time, player_id, god_id):
+    god_data = call("getgodranks", dev_id, auth_key, session_id, time, "/"+player_id)
+    for g in range(len(god_data)):
+        if god_data[g]['god_id'] == god_id:
+            #print("!!",player_id,god_id,god_data[g])
+            return god_data[g]
+    return False
+    #print(god_data)
+
+def player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data):
+    player_stats = {"taskForce1":{"player1":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player2":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player3":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player4":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player5":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0}
+                                  },
+                    "taskForce2":{"player6":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player7":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player8":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player9":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0},
+                                  "player10":{"id":"", "hours":0, "godWins":0, "godKDA":0, "godGames":0}
+                                  }}
+    count = 1
+    for p in range(len(match_data)):
+        if match_data[p]["playerId"] == "0":
+            None
+        else:
+            team = "taskForce1"
+            if p > 4:
+                team = "taskForce2"
+            player_stats[team]["player"+str(count)]["id"] = match_data[p]["playerName"]
+            player_hours = call("getplayer", dev_id, auth_key, session_id, time, "/"+match_data[p]['playerId'])[0]["HoursPlayed"]
+            print(match_data[p]['playerId'])
+            player_stats[team]["player"+str(count)]["hours"] = player_hours
+            god_data = god_data_from_player_id(dev_id, auth_key, session_id, time, match_data[p]["playerId"], str(match_data[p]["GodId"]))
+            if god_data == False:
+                None
+            else:
+                god_wins = god_data["Wins"]
+                player_stats[team]["player"+str(count)]["godWins"] = god_wins
+                god_kda = round((god_data["Kills"] + god_data["Assists"]) / god_data["Deaths"],3)
+                player_stats[team]["player"+str(count)]["godKDA"] = god_kda
+                god_games= god_data["Wins"] + god_data["Losses"]
+                player_stats[team]["player"+str(count)]["godGames"] = god_games
+        count += 1
+
+    return player_stats
+
+def team_stats_from_player_stats(player_stats):
+    team_1_hours = 0
+    team_1_wins = 0
+    team_1_KDA_total = 0
+    team_1_KDA_weighted = 0
+    team_1_games = 0
+
+    team_2_hours = 0
+    team_2_wins = 0
+    team_2_KDA_total = 0
+    team_2_KDA_weighted = 0
+    team_2_games = 0
     
-    for p in range(half,len(match_data['data'])):
-        team_2['gods'].append(match_data['data'][p][1]) #god
-        if (match_data['data'][p][-1] == "public"):
-            team_2['time'] += match_data['data'][p][3]      #time
-            team_2['god_games'] += match_data['data'][p][5] #god_games
-            team_2_publics += 1
-    if (team_2['time'] != 0):
-        team_2['time'] /= team_2_publics
-    if (team_2['god_games'] != 0):
-        team_2['god_games'] /= team_2_publics
-    print(team_1_publics)
-    print(team_2_publics)
-    print(match_data['id'])
-    return ({'id':match_data['id'],'teams':[team_1, team_2]})
+    for p in range(len(player_stats['taskForce1'])):
+        player = player_stats['taskForce1']["player"+str(p+1)]
+        team_1_hours += player['hours']
+        team_1_wins += player['godWins']
+        team_1_KDA_total += (player['godKDA'] * player['godGames'])
+        team_1_games += player['godGames']
+    if team_1_games > 0:
+        team_1_KDA_weighted = round(team_1_KDA_total / team_1_games,3)
+    for p in range(len(player_stats['taskForce2'])):
+        player = player_stats['taskForce2']["player"+str(p+6)]
+        team_2_hours += player['hours']
+        team_2_wins += player['godWins']
+        team_2_KDA_total += (player['godKDA'] * player['godGames'])
+        team_2_games += player['godGames']
+    if team_2_games > 0:
+        team_2_KDA_weighted = round(team_2_KDA_total / team_2_games,3)
+    return [team_1_hours,team_1_wins,team_1_KDA_weighted, team_2_hours,team_2_wins,team_2_KDA_weighted]
+    
+def run_player_stats(dev_id, auth_key, session_id, time, t):
+    #print(time)
 
-def postgame_data(match_id):
-    return call('getdemodetails', dev_id, auth_key, session_id, time, match_id)[0]['Winning_Team']
+    if (t.minute//10*10-10 < 0):
+        hour = "/{:02d}".format(t.hour)    
+        minute = ",{:02d}".format(0)
+    else:
+        hour = "/{:02d}".format(t.hour)    
+        minute = ",{:02d}".format(t.minute//10*10-10)
+    
+    
+    
+    batch_ids = match_id_batch(dev_id, auth_key, session_id, time, "/435", "/20190618", hour, minute)
+    match_id_x = ""
+    all_data = []
+    m = len(batch_ids)-1
+    while m >= 0:
+        if batch_ids[m]["Active_Flag"] == 'y':
+            #print(batch_ids[m]["Match"])
+            match_id_x = batch_ids[m]["Match"]
+            #print(match_id_x)
+            match_data = match_data_from_match_id(dev_id, auth_key, session_id, time, "/"+match_id_x)
+            #print(match_data)
+            player_stats = player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data)
+            #print(player_stats)
+            team_stats = team_stats_from_player_stats(player_stats)
+            #print(team_stats)
+            if team_stats[0] == 0 and team_stats[1] == 0 and team_stats[2] == 0 and team_stats[3] == 0 and team_stats[4] == 0 and team_stats[5] == 0:
+                if m <= len(batch_ids)-1:
+                    m+= 1
+                print ("redo")
+            else:
+                all_data.append([match_id_x, team_stats[0], team_stats[1], team_stats[2], team_stats[3], team_stats[4], team_stats[5]])
+                m-= 1
+            print([match_id_x, team_stats[0], team_stats[1], team_stats[2], team_stats[3], team_stats[4], team_stats[5]])
+        else:
+            m-=1
+    for x in range(len(all_data)):
+        print(all_data[x])
+    return all_data
 
-live = live_match_data(dev_id, auth_key, session_id, time, "simplicityxo")
-print(live)
-if live != "Offline" and live != "Private":
-    pred = pregame_data(live)
-    print(pred)
-x = postgame_data('/942154704')
-print(x)
-
-'''
-import pandas as pd
-import xgboost as xjb
-from sklearn.linear_model import LogisticalRegression
-from sklearn.svm import SVC
-from IPython.display import display
-
-def training_add_features(data):
-    None
-
-def training_add_result(data):
-    None
-
-def win_prediction(training):
-    training = pd.read_csv('final_dataset.csv')
-'''
-
-
-
-            
-#gods = call('getgods', dev_id, auth_key, session_id, time, "/1")
-#print(gods[0])
-'''
-live = live_match_data(dev_id, auth_key, session_id, time, "EckiD")
-print(live)
-win = win_prediction(live)
-print(win)
-'''
-#@app.route('/player/'+name)
-@app.route('/')
-def index():
-    return render_template("index.html")
-
-@app.route("/search", methods=['GET'])
-def search():
-    if request.method=='GET':
-        username=request.args.get('player')
-        
-        live = live_match_data(dev_id, auth_key, session_id, time, username)
-        if live == "Offline": #the player is not ingame
-            return "<h1>Offline</h1>"
-        elif live =="Private":
-            return "<h1>Private</h1>"
-        else: #the player is ingame
-            #return render_template("index.html")
-            return render_template("main.html", data=live)
-    return render_template("main.html", data=live)            
+#datax = run_player_stats(dev_id, auth_key, session_id, time, t)
+#print(datax)

@@ -100,8 +100,10 @@ def win_prediction(match_data):
                     count +=1
                     team1hours += mx[a][3]
                     team1wins += mx[a][4]*mx[a][5]
-            team1hours /= count
-            team1wins /= count
+            if team1hours != 0:
+                team1hours /= count
+            if team1wins != 0:
+                team1wins /= count
             team2skill = 0
             team2hours = 0
             team2wins = 0
@@ -111,8 +113,10 @@ def win_prediction(match_data):
                     count +=1
                     team2hours += mx[a][3]
                     team2wins += mx[a][4]*mx[a][5]
-            team2hours /= count
-            team2wins /= count
+            if team2hours != 0:
+                team2hours /= count
+            if team2wins != 0:
+                team2wins /= count
             team1skill = 100* (team1hours/(team1hours + team2hours) + team1wins/(team1wins + team2wins))/2
             team2skill = (100 - team1skill)
             team1skill = round(team1skill,1) 
