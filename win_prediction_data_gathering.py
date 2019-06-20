@@ -31,54 +31,6 @@ def call(api_type, dev_id, auth_key, session_id, time, parameter1, parameter2=""
     
 session_id = start_session(dev_id, auth_key, time)
 
-def live_match_data(dev_id, auth_key, session_id, time, player_name):
-    #Get Player Status
-    player_id = call("getplayer", dev_id, auth_key, session_id, time, "/"+player_name, "", "")
-    if player_id == []:
-        return "Private"
-    player_id = player_id[0]["Id"]
-    player_id = "/" + str(player_id)
-    getplayerstatus = call("getplayerstatus", dev_id, auth_key, session_id, time, player_id)
-    player_status = getplayerstatus[0]["status_string"]
-    if (player_status != "In Game"):
-        return "Offline"
-    else:
-        match_id = "/" + str(getplayerstatus[0]["Match"])
-        mdt = call("getmatchplayerdetails", dev_id, auth_key, session_id, time, match_id)
-        match_data = []
-        for x in range(len(mdt)):
-            pdt = call("getplayer", dev_id, auth_key, session_id, time, "/"+mdt[x]['playerId'])
-            if (mdt[x]['playerName'] != ''):
-                gdt = call("getgodranks", dev_id, auth_key, session_id, time, "/"+mdt[x]['playerName'])
-                found = False
-                for y in range(len(gdt)):
-                    if (gdt[y]['god'] == mdt[x]['GodName']):        #i will reformat this to a dictionary, I am silly. :P
-                        match_data.append([mdt[x]['taskForce'],     #0
-                                           mdt[x]['GodName'],       #1
-                                           mdt[x]['playerName'],    #2
-                                           pdt[0]['HoursPlayed'],   #3
-                                           gdt[y]['Wins'],          #4
-                                           gdt[y]['Wins']+gdt[y]['Losses'], #5
-                                           round(((gdt[y]['Kills']+gdt[y]['Assists'])/gdt[y]['Deaths']),2), #6
-                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg", #7
-                                           "public"])   #8
-                        found = True
-                if found == False:
-                    match_data.append([mdt[x]['taskForce'],
-                                           mdt[x]['GodName'],
-                                           mdt[x]['playerName'],
-                                           pdt[0]['HoursPlayed'],
-                                           0,
-                                           0,
-                                           0,
-                                           "/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg",
-                                           "public"])
-            else:
-                match_data.append([mdt[x]['taskForce'],mdt[x]['GodName'],'','','','','',"/static/img/"+ mdt[x]['GodName'].lower().replace(" ","-").replace("'","") +".jpg","private"])
-        #print("{} | {:12} | {:16} | {:5} | {:4} | {:3} | {:4}".format(" ","God","Player","Hours","Win %","Games", "KDA"))
-        match_data = {'id':match_id,'data':match_data}
-        return match_data
-
 def player_id_from_name(dev_id, auth_key, session_id, time, player_name):
     player_id = call("getplayer", dev_id, auth_key, session_id, time, "/"+player_name, "", "")
     if player_id == []:
@@ -133,7 +85,7 @@ def player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data)
                 team = "taskForce2"
             player_stats[team]["player"+str(count)]["id"] = match_data[p]["playerName"]
             player_hours = call("getplayer", dev_id, auth_key, session_id, time, "/"+match_data[p]['playerId'])[0]["HoursPlayed"]
-            print(match_data[p]['playerId'])
+            #print(match_data[p]['playerId'])
             player_stats[team]["player"+str(count)]["hours"] = player_hours
             god_data = god_data_from_player_id(dev_id, auth_key, session_id, time, match_data[p]["playerId"], str(match_data[p]["GodId"]))
             if god_data == False:
@@ -141,7 +93,10 @@ def player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data)
             else:
                 god_wins = god_data["Wins"]
                 player_stats[team]["player"+str(count)]["godWins"] = god_wins
-                god_kda = round((god_data["Kills"] + god_data["Assists"]) / god_data["Deaths"],3)
+                if god_data["Deaths"] == 0:
+                    god_kda = round(god_data["Kills"] + god_data["Assists"],3)
+                else:
+                    god_kda = round((god_data["Kills"] + god_data["Assists"]) / god_data["Deaths"],3)
                 player_stats[team]["player"+str(count)]["godKDA"] = god_kda
                 god_games= god_data["Wins"] + god_data["Losses"]
                 player_stats[team]["player"+str(count)]["godGames"] = god_games
@@ -189,10 +144,7 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
     else:
         hour = "/{:02d}".format(t.hour)    
         minute = ",{:02d}".format(t.minute//10*10-10)
-    
-    
-    
-    batch_ids = match_id_batch(dev_id, auth_key, session_id, time, "/435", "/20190618", hour, minute)
+    batch_ids = match_id_batch(dev_id, auth_key, session_id, time, "/435", "/20190619", hour, minute)
     match_id_x = ""
     all_data = []
     m = len(batch_ids)-1
@@ -221,5 +173,5 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
         print(all_data[x])
     return all_data
 
-#datax = run_player_stats(dev_id, auth_key, session_id, time, t)
-#print(datax)
+datax = run_player_stats(dev_id, auth_key, session_id, time, t)
+print(datax)
