@@ -8,7 +8,7 @@ import hashlib
 #current time
 t = datetime.datetime.utcnow()
 time = "{}{:02d}{:02d}{:02d}{:02d}{:02d}".format(t.year, t.month, t.day, t.hour, t.minute, t.second)
-print(time)
+#print(time)
 api_url = "http://api.smitegame.com/smiteapi.svc"
 dev_id = "3222"
 auth_key = "8C9376AF7E8A49A2A774574F48ED4D3F"
@@ -101,7 +101,6 @@ def player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data)
                 god_games= god_data["Wins"] + god_data["Losses"]
                 player_stats[team]["player"+str(count)]["godGames"] = god_games
         count += 1
-
     return player_stats
 
 def team_stats_from_player_stats(player_stats):
@@ -110,29 +109,42 @@ def team_stats_from_player_stats(player_stats):
     team_1_KDA_total = 0
     team_1_KDA_weighted = 0
     team_1_games = 0
+    team_1_publics = 0
 
     team_2_hours = 0
     team_2_wins = 0
     team_2_KDA_total = 0
     team_2_KDA_weighted = 0
     team_2_games = 0
+    team_2_publics = 0
     
     for p in range(len(player_stats['taskForce1'])):
         player = player_stats['taskForce1']["player"+str(p+1)]
-        team_1_hours += player['hours']
-        team_1_wins += player['godWins']
-        team_1_KDA_total += (player['godKDA'] * player['godGames'])
-        team_1_games += player['godGames']
+        if player['hours'] > 0:
+            team_1_hours += player['hours']
+            team_1_wins += player['godWins']
+            team_1_KDA_total += (player['godKDA'] * player['godGames'])
+            team_1_games += player['godGames']
+            team_1_publics += 1
     if team_1_games > 0:
         team_1_KDA_weighted = round(team_1_KDA_total / team_1_games,3)
     for p in range(len(player_stats['taskForce2'])):
         player = player_stats['taskForce2']["player"+str(p+6)]
-        team_2_hours += player['hours']
-        team_2_wins += player['godWins']
-        team_2_KDA_total += (player['godKDA'] * player['godGames'])
-        team_2_games += player['godGames']
+        if player['hours'] > 0:
+            team_2_hours += player['hours']
+            team_2_wins += player['godWins']
+            team_2_KDA_total += (player['godKDA'] * player['godGames'])
+            team_2_games += player['godGames']
+            team_2_publics += 1
     if team_2_games > 0:
         team_2_KDA_weighted = round(team_2_KDA_total / team_2_games,3)
+
+    if team_1_publics > 0:
+        team_1_hours /= team_1_publics
+        team_1_wins /= team_1_publics
+    if team_2_publics > 0:
+        team_2_hours /= team_2_publics
+        team_2_wins /= team_2_publics
     return [team_1_hours,team_1_wins,team_1_KDA_weighted, team_2_hours,team_2_wins,team_2_KDA_weighted]
     
 def run_player_stats(dev_id, auth_key, session_id, time, t):
@@ -144,12 +156,15 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
     else:
         hour = "/{:02d}".format(t.hour)    
         minute = ",{:02d}".format(t.minute//10*10-10)
-    batch_ids = match_id_batch(dev_id, auth_key, session_id, time, "/435", "/20190619", hour, minute)
+    date = "/{:04d}{:02d}{:02d}".format(t.year, t.month, t.day)
+    batch_ids = match_id_batch(dev_id, auth_key, session_id, time, "/435", date, hour, minute)
+    #print(batch_ids)
     match_id_x = ""
     all_data = []
     m = len(batch_ids)-1
     while m >= 0:
         if batch_ids[m]["Active_Flag"] == 'y':
+            ta = 0
             #print(batch_ids[m]["Match"])
             match_id_x = batch_ids[m]["Match"]
             #print(match_id_x)
@@ -159,9 +174,10 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
             #print(player_stats)
             team_stats = team_stats_from_player_stats(player_stats)
             #print(team_stats)
-            if team_stats[0] == 0 and team_stats[1] == 0 and team_stats[2] == 0 and team_stats[3] == 0 and team_stats[4] == 0 and team_stats[5] == 0:
-                if m <= len(batch_ids)-1:
+            if team_stats[0] == 0 and team_stats[1] == 0 and team_stats[2] == 0 and team_stats[3] == 0 and team_stats[4] == 0 and team_stats[5] == 0 and ta < 3:
+                if m < len(batch_ids)-1:
                     m+= 1
+                    ta + 1
                 print ("redo")
             else:
                 all_data.append([match_id_x, team_stats[0], team_stats[1], team_stats[2], team_stats[3], team_stats[4], team_stats[5]])
