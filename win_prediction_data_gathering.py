@@ -162,9 +162,9 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
     match_id_x = ""
     all_data = []
     m = len(batch_ids)-1
+    ta = 0
     while m >= 0:
         if batch_ids[m]["Active_Flag"] == 'y':
-            ta = 0
             #print(batch_ids[m]["Match"])
             match_id_x = batch_ids[m]["Match"]
             #print(match_id_x)
@@ -174,14 +174,21 @@ def run_player_stats(dev_id, auth_key, session_id, time, t):
             #print(player_stats)
             team_stats = team_stats_from_player_stats(player_stats)
             #print(team_stats)
-            if team_stats[0] == 0 and team_stats[1] == 0 and team_stats[2] == 0 and team_stats[3] == 0 and team_stats[4] == 0 and team_stats[5] == 0 and ta < 3:
-                if m < len(batch_ids)-1:
-                    m+= 1
-                    ta + 1
-                print ("redo")
+            cc = 0
+            while team_stats[0] == 0 and team_stats[1] == 0 and team_stats[2] == 0 and team_stats[3] == 0 and team_stats[4] == 0 and team_stats[5] == 0 and cc < 3:
+                print("redo", cc+1)
+                match_id_x = batch_ids[m]["Match"]
+                #print(match_id_x)
+                match_data = match_data_from_match_id(dev_id, auth_key, session_id, time, "/"+match_id_x)
+                #print(match_data)
+                player_stats = player_stats_from_match_data(dev_id, auth_key, session_id, time, match_data)
+                #print(player_stats)
+                team_stats = team_stats_from_player_stats(player_stats)
+                cc += 1
             else:
                 all_data.append([match_id_x, team_stats[0], team_stats[1], team_stats[2], team_stats[3], team_stats[4], team_stats[5]])
                 m-= 1
+                ta = -1
             print([match_id_x, team_stats[0], team_stats[1], team_stats[2], team_stats[3], team_stats[4], team_stats[5]])
         else:
             m-=1
